@@ -1,8 +1,13 @@
-# Allows the user to play a game of tic-tac-toe on a n by n board. The user can choose to play against another player or the computer. However, keep in mind that while the computer can play any game, the computer strategy was designed with a traditional 3 by 3 board in mind.
+# Allows the user to play a game of tic-tac-toe on a n by n board. The user
+# can choose to play against another player or the computer. However, keep
+# in mind that while the computer can play any game, the computer strategy
+# was designed with a traditional 3 by 3 board in mind.
 
 
 
-# Creates an n by n tic-tac-toe grid, where n is the input. The top left square corresponds to coordinates (1,1) while the bottom right square corresponds to coordinates (n,n)
+# Creates an n by n tic-tac-toe grid, where n is the input. The top left
+# square corresponds to coordinates (1,1) while the bottom right square
+# corresponds to coordinates (n,n)
 class Board
   
   attr_accessor :grid, :size
@@ -12,7 +17,8 @@ class Board
     @grid = grid
   end
 
-  # Initializes the values on the playing board. I.e. sets all the squares to nil to start.
+  # Initializes the values on the playing board. I.e. sets all the squares
+  # to nil to start.
   def set_board
     (1..@size).each do |row|
       (1..@size).each { |column| @grid[[column, row]] = nil }
@@ -66,7 +72,8 @@ class Board
     wins_rows_columns(new_grid) || wins_diagonals(new_grid)
   end
   
-  # Pick out the squares with a particular value ("X", "O", or nil). So that it is easier to check if there's a winner.
+  # Pick out the squares with a particular value ("X", "O", or nil). So 
+  # that it is easier to check if there's a winner.
   def split_grid(target)
     @grid.select { |key, value| value == target }.keys
   end
@@ -113,7 +120,8 @@ class Board
     new_board = Board.new(@size, position)
   end
   
-  # Updates the grid with "X" or "O" for a given coordinate. Target is either "X" or "O"
+  # Updates the grid with "X" or "O" for a given coordinate. Target is 
+  # either "X" or "O"
   def update_board!(coord, target)
     if @grid[coord] # Checks to see if the space is free
       puts "This square has already been used at this location!"
@@ -124,7 +132,8 @@ class Board
     end
   end
   
-  # Asks for and checks the validity of player's move. Target is either "X" or "O"
+  # Asks for and checks the validity of player's move. Target is either "X"
+  # or "O"
   def player_move(target)
     puts "Please input x coordinates: "
     x = player_input_coordinates
@@ -135,7 +144,8 @@ class Board
     end
   end
   
-  # Asks the player to input the x or y coordinates of the square they want. Only positive integers in the board range accepted.
+  # Asks the player to input the x or y coordinates of the square they
+  # want. Only positive integers in the board range accepted.
   def player_input_coordinates
     input = gets.chomp
     unless input =~ /^[+]?[0-9]+$/ && (1..@size).include?(input.to_i)
@@ -197,7 +207,8 @@ def player_v_computer(game_board)
     elsif game_board.full?
       return "It's a draw!"
     end
-    computer_move(game_board, computer_target, human_target) # Computer makes move
+    # Computer makes move
+    computer_move(game_board, computer_target, human_target) 
     game_board.print_board
     if game_board.wins?(computer_target)
       return "Computer wins!"
@@ -237,18 +248,23 @@ def computer_checks_move(game_board, computer_target, human_target)
   available_moves = game_board.split_grid(nil) # All possible moves
   if available_moves.length > 1
     
-    check_move = check_win_move(game_board, computer_target, available_moves) # Checks for rule 1
+    # Checks for rule 1
+    check_move = check_win_move(game_board, computer_target, available_moves) 
     return check_move if check_move
     
-    check_move = check_win_move(game_board, human_target, available_moves) # Checks for rule 2
+    # Checks for rule 2
+    check_move = check_win_move(game_board, human_target, available_moves) 
     return check_move if check_move
     
-    check_move = check_forks(game_board, computer_target, available_moves) # Checks for rule 3
+    # Checks for rule 3
+    check_move = check_forks(game_board, computer_target, available_moves) 
     return check_move if check_move
     
-    check_move = check_forks(game_board, human_target, available_moves) # Checks for rule 4
+    # Checks for rule 4
+    check_move = check_forks(game_board, human_target, available_moves)
     # Reacts to opponent forks in two ways:
-    # First, if there's a way to create a position that the opponent must defend against without creating the fork, do that.
+    # First, if there's a way to create a position that the opponent must
+    # defend against without creating the fork, do that.
     # Otherwise, block the fork position
     if check_move
       block_fork = block_forks(game_board, computer_target, available_moves - [check_move]) 
@@ -259,11 +275,13 @@ def computer_checks_move(game_board, computer_target, human_target)
       end
     end
     
-    unless (game_board.center & available_moves).empty? # Checks rule 5
+    # Checks rule 5
+    unless (game_board.center & available_moves).empty? 
       return (game_board.center & available_moves).sample
     end
     
-    unless (game_board.corners & available_moves).empty? # Checks rule 6
+    # Checks rule 6
+    unless (game_board.corners & available_moves).empty? 
       return (game_board.corners & available_moves).sample
     end
     
